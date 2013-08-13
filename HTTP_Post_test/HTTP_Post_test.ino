@@ -22,6 +22,7 @@ This example does a test of the TCP client capability:
   * Optional: Ping
   * Connect to website and print out webpage contents
   * Disconnect
+  
 SmartConfig is still beta and kind of works but is not fully vetted!
 It might not work on all networks!
 */
@@ -42,15 +43,17 @@ Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ
                                          SPI_CLOCK_DIV2); // you can change this clock speed
 
 #define WLAN_SSID       "WhiteSpace"           // cannot be longer than 32 characters!
-#define WLAN_PASS       "
-"
+#define WLAN_PASS       ""
 // Security can be WLAN_SEC_UNSEC, WLAN_SEC_WEP, WLAN_SEC_WPA or WLAN_SEC_WPA2
 #define WLAN_SECURITY   WLAN_SEC_WPA2
 
 // What page to grab!
 #define WEBSITE      "www.adafruit.com"
-#define WEBPAGE      "/testwifi/index.html"
+//#define WEBPAGE      "/testwifi/index.html"
 
+
+
+#define WEBPAGE "/"
 
 /***********************************************************************
 ***/
@@ -103,10 +106,12 @@ void setup(void)
     if (! cc3000.getHostByName(WEBSITE, &ip)) {
       Serial.println(F("Couldn't resolve!"));
     }
+    
     delay(500);
   }
 
   cc3000.printIPdotsRev(ip);
+  
   
   // Optional: Do a ping test on the website
   /*
@@ -114,7 +119,8 @@ void setup(void)
   replies = cc3000.ping(ip, 5);
   Serial.print(replies); Serial.println(F(" replies"));
   */  
-
+  //ip = 3232235876UL; http://www.webtoolhub.com/tn561377-ip-address-number-converter.aspx
+Serial.println(ip);
   /* Try connecting to the website */
   Adafruit_CC3000_Client www = cc3000.connectTCP(ip, 80);
   if (www.connected()) {
@@ -126,6 +132,7 @@ void setup(void)
     www.println();
   } else {
     Serial.println(F("Connection failed"));    
+    
     return;
   }
 
@@ -140,10 +147,12 @@ void setup(void)
   www.close();
   Serial.println(F("-------------------------------------"));
   
+  
   /* You need to make sure to clean up after yourself or the CC3000 can freak out */
   /* the next time your try to connect ... */
   Serial.println(F("\n\nDisconnecting"));
-  cc3000.disconnect();
+ //
+ cc3000.disconnect();
   
 }
 
