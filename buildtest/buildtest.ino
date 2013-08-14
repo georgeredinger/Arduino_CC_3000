@@ -46,8 +46,8 @@ module.
 Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
                                          SPI_CLOCK_DIV2); // you can change this clock speed but DI
 
-#define WLAN_SSID       "WhiteSpace"        // cannot be longer than 32 characters!
-#define WLAN_PASS       ""
+#define WLAN_SSID       "OfficeSandpoint"        // cannot be longer than 32 characters!
+#define WLAN_PASS       "506office1419"
 // Security can be WLAN_SEC_UNSEC, WLAN_SEC_WEP, WLAN_SEC_WPA or WLAN_SEC_WPA2
 #define WLAN_SECURITY   WLAN_SEC_WPA2
 

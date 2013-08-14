@@ -42,14 +42,13 @@ It might not work on all networks!
 Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
                                          SPI_CLOCK_DIV2); // you can change this clock speed
 
-#define WLAN_SSID       "WhiteSpace"           // cannot be longer than 32 characters!
+#define WLAN_SSID       "WhiteSpace" //cannot be longer than 32 characters!
 #define WLAN_PASS       ""
 // Security can be WLAN_SEC_UNSEC, WLAN_SEC_WEP, WLAN_SEC_WPA or WLAN_SEC_WPA2
 #define WLAN_SECURITY   WLAN_SEC_WPA2
 
 // What page to grab!
-#define WEBSITE      "www.adafruit.com"
-//#define WEBPAGE      "/testwifi/index.html"
+#define WEBSITE      "/"
 
 
 
@@ -102,13 +101,13 @@ void setup(void)
   ip = 0;
   // Try looking up the website's IP address
   Serial.print(WEBSITE); Serial.print(F(" -> "));
-  while (ip == 0) {
-    if (! cc3000.getHostByName(WEBSITE, &ip)) {
-      Serial.println(F("Couldn't resolve!"));
-    }
+  //while (ip == 0) {
+  //  if (! cc3000.getHostByName(WEBSITE, &ip)) {
+  //    Serial.println(F("Couldn't resolve!"));
+  //  }
     
-    delay(500);
-  }
+  //  delay(500);
+ // }
 
   cc3000.printIPdotsRev(ip);
   
@@ -118,18 +117,33 @@ void setup(void)
   Serial.print(F("\n\rPinging ")); cc3000.printIPdotsRev(ip); Serial.print("...");  
   replies = cc3000.ping(ip, 5);
   Serial.print(replies); Serial.println(F(" replies"));
-  */  
+  */
+// 192.168.1.100  
   //ip = 3232235876UL; http://www.webtoolhub.com/tn561377-ip-address-number-converter.aspx
+//10.10.50.94
+//curl --data "param1=value1&param2=value2" http://echo.200please.com
+
+ip = 168440414;
 Serial.println(ip);
   /* Try connecting to the website */
-  Adafruit_CC3000_Client www = cc3000.connectTCP(ip, 80);
+  char *json = "{\"some\":\json\}";
+  char len_buf[5];
+  itoa(strlen(json)+1,len_buf,10);
+  Adafruit_CC3000_Client www = cc3000.connectTCP(ip, 3000);
   if (www.connected()) {
-    www.print(F("GET "));
-    www.print(WEBPAGE);
-    www.print(F(" HTTP/1.0\r\n"));
-    www.print(F("Host: ")); www.println(WEBSITE);
-    www.println(F("Connection: close"));
-    www.println();
+   www.print(F("POST "));
+   www.println(WEBPAGE);
+   www.println(F("From: george@georgeredinger.com"));
+   www.println(F("User-Agent: CC3000"));
+   www.println(F("HOST: "));www.print(WEBPAGE);
+   www.println(F("conntent-Length: "));www.println(len_buf);
+   www.println(F("www.Content-Type: application/x-www-form-urlencoded"));
+   www.println();
+   www.println();
+   www.println(json);
+   www.println(F("Connection: close"));
+   www.println();
+ 
   } else {
     Serial.println(F("Connection failed"));    
     
