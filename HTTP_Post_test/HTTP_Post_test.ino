@@ -19,7 +19,7 @@ This example does a test of the TCP client capability:
   * AP connection
   * DHCP printout
   * DNS lookup
-  * Optional: Ping
+  * Optional: Ping/
   * Connect to website and print out webpage contents
   * Disconnect
   
@@ -32,7 +32,7 @@ It might not work on all networks!
 #include <string.h>
 #include "utility/debug.h"
 
-// These are the interrupt and control pins
+// These are the interrupt and control pins/
 #define ADAFRUIT_CC3000_IRQ   3  // MUST be an interrupt pin!
 // These can be any two pins
 #define ADAFRUIT_CC3000_VBAT  5
@@ -42,8 +42,8 @@ It might not work on all networks!
 Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
                                          SPI_CLOCK_DIV2); // you can change this clock speed
 
-#define WLAN_SSID       "WhiteSpace" //cannot be longer than 32 characters!
-#define WLAN_PASS       ""
+#define WLAN_SSID       "OfficeSandpoint" //cannot be longer than 32 characters!
+#define WLAN_PASS       "506office1419"
 // Security can be WLAN_SEC_UNSEC, WLAN_SEC_WEP, WLAN_SEC_WPA or WLAN_SEC_WPA2
 #define WLAN_SECURITY   WLAN_SEC_WPA2
 
@@ -52,7 +52,7 @@ Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ
 
 
 
-#define WEBPAGE "/"
+#define WEBPAGE "/collect"
 
 /***********************************************************************
 ***/
@@ -119,16 +119,17 @@ void setup(void)
   Serial.print(replies); Serial.println(F(" replies"));
   */
 // 192.168.1.100  
-  //ip = 3232235876UL; http://www.webtoolhub.com/tn561377-ip-address-number-converter.aspx
+  ip = 3232235876UL; http://www.webtoolhub.com/tn561377-ip-address-number-converter.aspx
 //10.10.50.94
 //curl --data "param1=value1&param2=value2" http://echo.200please.com
 
 ip = 168440414;
 Serial.println(ip);
   /* Try connecting to the website */
-  char *json = "{\"some\":\json\}";
+  char *json = "{\"some\":\"json\"}";
   char len_buf[5];
-  itoa(strlen(json)+1,len_buf,10);
+  itoa(strlen(json)+1+2,len_buf,10);
+  Serial.print("length=");Serial.println(len_buf);
   Adafruit_CC3000_Client www = cc3000.connectTCP(ip, 3000);
   if (www.connected()) {
    www.print(F("POST "));
@@ -136,9 +137,8 @@ Serial.println(ip);
    www.println(F("From: george@georgeredinger.com"));
    www.println(F("User-Agent: CC3000"));
    www.println(F("HOST: "));www.print(WEBPAGE);
-   www.println(F("conntent-Length: "));www.println(len_buf);
    www.println(F("www.Content-Type: application/x-www-form-urlencoded"));
-   www.println();
+   www.println(F("Content-Length: "));www.println(len_buf);
    www.println();
    www.println(json);
    www.println(F("Connection: close"));
