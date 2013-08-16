@@ -116,8 +116,6 @@ http://www.webtoolhub.com/tn561377-ip-address-number-converter.aspx
     ip = 168440414;
     Serial.println(ip);
     /* Try connecting to the website */
-    itoa(i++,count,10);
-
     //char *json = "{\"some\":\"json\"}";
     char json[20];
     sprintf(json,"{\"count\":%d}",i++);
@@ -143,8 +141,7 @@ http://www.webtoolhub.com/tn561377-ip-address-number-converter.aspx
       Serial.println(F("Connection failed"));    
     }
    Serial.println("disconnecting socket");
-    cc3000.disconnect();
-    delay(1000);
+    www.close();
   }  
 }
 
